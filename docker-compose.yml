@@ -1,0 +1,34 @@
+services:
+  db:
+    container_name: db
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+  web:
+    container_name: web
+    build: .
+    environment:
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=yochel
+      - DB_HOST=db
+      - DB_PORT=5432
+      #- SQLALCHEMY_DATABASE_URI=postgresql://postgres:yochel@db:5432/postgres
+    command: ["python", "app.py"]
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
+volumes:
+  pg_data:
+
+networks:
+  default:
+    driver: bridge
