@@ -71,6 +71,10 @@ def delete_user(user_id):
     db.session.commit()
     return jsonify({"message": "User deleted successfully"})
 
+@app.errorhandler(500)
+def not_found_error(error):
+    return jsonify({"message": "Not valid data"}), 500
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()  # Обязательно создайте все таблицы перед запуском приложения
